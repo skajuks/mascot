@@ -3,6 +3,7 @@ import { blob, pix, type Character, type CharacterDef, type Features } from 'mas
 import { MascotProvider, MascotSpot, useMascot, useMascotEvent } from 'mascot/react'
 import { Backdrop } from './Backdrop'
 import { Editor } from './Editor'
+import { PixLogo } from './PixLogo'
 
 const NAV_HEIGHT = 64
 
@@ -33,7 +34,7 @@ export function App() {
         <Backdrop light={flashlight} />
         <nav className="nav" style={{ height: NAV_HEIGHT }}>
           <a href="#top" className="logo">
-            <span className="logo-dot" aria-hidden="true" />
+            <PixLogo />
             mascot
           </a>
           <a href="#spots">spots</a>
@@ -99,9 +100,9 @@ export function App() {
         </Section>
         <MascotSpot spot className="card editor-card" data-no-light>
           <Editor
-            onUse={def => {
+            onUse={(def, opts) => {
               setCharacter(def)
-              scrollTo({ top: 0 })
+              if (opts?.scroll !== false) scrollTo({ top: 0 })
             }}
           />
         </MascotSpot>

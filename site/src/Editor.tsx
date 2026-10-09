@@ -14,6 +14,11 @@ import {
   type EdChar,
   type EdLayer,
 } from './editorModel'
+import { decodeCharacter, encodeCharacter } from './share'
+import { ColorField } from './ui/ColorField'
+import { NumberField } from './ui/NumberField'
+import { PixelIcon } from './ui/PixelIcon'
+import { Select } from './ui/Select'
 
 const SAVE_KEY = 'mascot-editor'
 const STATES: State[] = ['idle', 'walk', 'air', 'held', 'dizzy', 'sleep']
@@ -46,7 +51,7 @@ function load(): EdChar {
 
 type History = { past: EdChar[]; now: EdChar; future: EdChar[] }
 
-export function Editor({ onUse }: { onUse: (def: CharacterDef) => void }) {
+export function Editor({ onUse }: { onUse: (def: CharacterDef, opts?: { scroll?: boolean }) => void }) {
   const [hist, setHist] = useState<History>(() => ({ past: [], now: load(), future: [] }))
   const ed = hist.now
   const [layerId, setLayerId] = useState(() => ed.layers[0]?.id ?? '')
@@ -330,6 +335,36 @@ export function Editor({ onUse }: { onUse: (def: CharacterDef) => void }) {
       // clipboard blocked: the code is shown below to copy by hand
     }
   }
+  // --- share links ----------------------------------------------------------------------------
+  const [shareNote, setShareNote] = useState<{ text: string; url?: string } | null>(null)
+  const share = async () => {
+    const url = `${location.origin}${location.pathname}#${await encodeCharacter(toDef(ed))}`
+    history.replaceState(null, '', url)
+    try {
+      await navigator.clipboard.writeText(url)
+      setShareNote({ text: 'Link copied. Anyone who opens it gets this character.' })
+    } catch {
+      setShareNote({ text: 'Copy this link:', url })
+    }
+  }
+  // Opening a shared link loads the character here and puts it on the page.
+  useEffect(() => {
+    let cancelled = false
+    decodeCharacter(location.hash)
+      .then(def => {
+        if (!def || cancelled) return
+        loadPreset(defineCharacter(def))
+        onUse(def, { scroll: false })
+        setShareNote({ text: `Loaded ${def.name} from a shared link.` })
+        document.getElementById('editor')?.scrollIntoView()
+      })
+      .catch(() => !cancelled && setShareNote({ text: 'That share link is broken. Showing your own character instead.' }))
+    return () => {
+      cancelled = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const loadPreset = (c: Character) => {
     const next = fromCharacter(c)
     change(next)
@@ -345,15 +380,11 @@ export function Editor({ onUse }: { onUse: (def: CharacterDef) => void }) {
         <label>
           Name <input value={ed.name} onChange={e => change({ ...ed, name: e.target.value }, false)} size={10} />
         </label>
-        <label>
-          Size{' '}
-          <input type="number" min={4} max={48} value={ed.width} onChange={e => change(resizeChar(ed, clampInt(e.target.value, 4, 48), ed.height))} />
-          ×
-          <input type="number" min={4} max={48} value={ed.height} onChange={e => change(resizeChar(ed, ed.width, clampInt(e.target.value, 4, 48)))} />
-        </label>
-        <label title="Grid row the feet stand on (red line)">
-          Feet <input type="number" min={1} max={ed.height} value={ed.feet} onChange={e => change({ ...ed, feet: clampInt(e.target.value, 1, ed.height) })} />
-        </label>
+        <NumberField label="W" aria-label="Width" min={4} max={48} value={ed.width} onChange={w => change(now => resizeChar(now, w, now.height))} />
+        <NumberField label="H" aria-label="Height" min={4} max={48} value={ed.height} onChange={h => change(now => resizeChar(now, now.width, h))} />
+        <span title="Grid row the feet stand on (red line)">
+          <NumberField label="Feet" min={1} max={ed.height} value={ed.feet} onChange={f => change(now => ({ ...now, feet: f }))} />
+        </span>
         <label title="Mirror the sprite when walking left">
           <input type="checkbox" checked={ed.flip} onChange={e => change({ ...ed, flip: e.target.checked })} /> Flip when walking left
         </label>
@@ -437,16 +468,7 @@ export function Editor({ onUse }: { onUse: (def: CharacterDef) => void }) {
             <button onClick={addFrame} title="Duplicate this frame to animate">+ Frame</button>
             {own && own.length > 1 && <button onClick={removeFrame}>− Frame</button>}
             {own && own.length > 1 && (
-              <label>
-                fps{' '}
-                <input
-                  type="number"
-                  min={1}
-                  max={30}
-                  value={layer.fps[pose] ?? 8}
-                  onChange={e => setLayer(l => ({ ...l, fps: { ...l.fps, [pose]: clampInt(e.target.value, 1, 30) } }), false)}
-                />
-              </label>
+              <NumberField label="fps" min={1} max={30} value={layer.fps[pose] ?? 8} onChange={v => setLayer(l => ({ ...l, fps: { ...l.fps, [pose]: v } }))} />
             )}
             <span className="ed-spacer" />
             {pose !== 'default' && own !== undefined && <button onClick={resetPose}>Use fallback</button>}
@@ -466,11 +488,14 @@ export function Editor({ onUse }: { onUse: (def: CharacterDef) => void }) {
           <h4>Palette</h4>
           <div className="ed-palette">
             {Object.entries(ed.palette).map(([k, v]) => (
-              <div key={k} className={`ed-swatch ${k === color ? 'on' : ''}`}>
-                <button style={{ background: v }} onClick={() => (setColor(k), setTool(t => (t === 'erase' ? 'paint' : t)))} aria-label={`Color ${k}`} />
-                <input type="color" value={v} onChange={e => change({ ...ed, palette: { ...ed.palette, [k]: e.target.value } }, false)} aria-label={`Edit color ${k}`} />
-                <code>{k}</code>
-                <button className="ed-x" onClick={() => removeColor(k)} aria-label={`Remove color ${k}`}>×</button>
+              // Anywhere on the row picks the colour to paint with; the swatch also opens the picker.
+              <div key={k} className={`ed-swatch ${k === color ? 'on' : ''}`} onClickCapture={() => (setColor(k), setTool(t => (t === 'erase' ? 'paint' : t)))}>
+                <ColorField compact value={v} onChange={hex => change(now => ({ ...now, palette: { ...now.palette, [k]: hex } }))} aria-label={`Edit color ${k}`} />
+                <button className="ed-swatch-pick" aria-label={`Paint with color ${k}`}>
+                  <code>{k}</code>
+                  <span>{v.toUpperCase()}</span>
+                </button>
+                <button className="ed-x" onClick={e => (e.stopPropagation(), removeColor(k))} aria-label={`Remove color ${k}`}>×</button>
               </div>
             ))}
             <button onClick={addColor}>+ Color</button>
@@ -478,17 +503,8 @@ export function Editor({ onUse }: { onUse: (def: CharacterDef) => void }) {
           <h4>Preview</h4>
           <canvas ref={previewRef} width={200} height={170} className="ed-preview" />
           <div className="ed-row">
-            <select value={previewState} onChange={e => setPreviewState(e.target.value as State)}>
-              {STATES.map(s => (
-                <option key={s}>{s}</option>
-              ))}
-            </select>
-            <select value={previewEmote} onChange={e => setPreviewEmote(e.target.value)}>
-              <option value="">no emote</option>
-              {emotes.map(s => (
-                <option key={s}>{s}</option>
-              ))}
-            </select>
+            <Select aria-label="Preview pose" value={previewState} onChange={setPreviewState} options={STATES.map(s => ({ value: s, label: s }))} />
+            <Select aria-label="Preview emote" value={previewEmote} onChange={setPreviewEmote} options={[{ value: '', label: 'none' }, ...emotes.map(s => ({ value: s, label: s }))]} />
           </div>
           <label className="ed-file">
             Import PNG into this frame
@@ -498,8 +514,20 @@ export function Editor({ onUse }: { onUse: (def: CharacterDef) => void }) {
             Put it on the page
           </button>
           <button onClick={copy}>{copied ? 'Copied!' : 'Copy code'}</button>
+          <button className="ed-share" onClick={share} disabled={!character}>
+            <PixelIcon name="link" /> Share link
+          </button>
         </aside>
       </div>
+      {shareNote && (
+        <div className="ed-note" role="status">
+          <span>{shareNote.text}</span>
+          {shareNote.url && <input readOnly value={shareNote.url} onFocus={e => e.target.select()} aria-label="Share link" />}
+          <button className="ed-x" onClick={() => setShareNote(null)} aria-label="Dismiss">
+            ×
+          </button>
+        </div>
+      )}
       <details className="ed-code">
         <summary>Code</summary>
         <pre>{code}</pre>
@@ -541,4 +569,3 @@ function floodFill(frame: string[], x: number, y: number, ch: string): string[] 
   return grid.map(r => r.join(''))
 }
 
-const clampInt = (v: string, lo: number, hi: number) => Math.min(hi, Math.max(lo, Math.round(Number(v) || lo)))

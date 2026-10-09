@@ -1,0 +1,359 @@
+/* Pixel skins for the controls ported from the LFX UI: square blocks, 2 px inset lines, hard shadows,
+   and panels that unroll in steps (top-down, or bottom-up when they open above their trigger). */
+
+@keyframes px-unroll {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+@keyframes px-unroll-up {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+@keyframes px-roll-away {
+  to {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+.px-panel,
+.px-select-panel {
+  position: fixed;
+  z-index: 1000;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-pixel);
+  box-shadow:
+    inset 0 0 0 2px var(--line),
+    6px 6px 0 #050505;
+  animation: px-unroll 120ms steps(4);
+}
+.px-panel-up {
+  animation-name: px-unroll-up;
+}
+.px-select-panel.is-closing {
+  pointer-events: none;
+  animation: px-roll-away 90ms steps(3) forwards;
+}
+.px-dim {
+  color: var(--mute);
+}
+.px-field-label {
+  color: var(--dim);
+  font-size: 13px;
+}
+
+/* --- select --- */
+.px-select {
+  position: relative;
+  display: inline-block;
+  min-width: 0;
+}
+.px-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  height: 34px;
+  padding: 0 10px;
+  text-align: left;
+}
+.px-select-trigger.is-open {
+  box-shadow: inset 0 0 0 2px var(--lime);
+}
+.px-select-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+}
+/* A mouse pick flickers in, like a channel changing. */
+.px-select-value.is-swapping {
+  animation: px-flicker 180ms steps(3);
+}
+@keyframes px-flicker {
+  0% {
+    opacity: 0;
+  }
+  34% {
+    opacity: 1;
+  }
+  67% {
+    opacity: 0.3;
+  }
+}
+.px-chevron {
+  flex-shrink: 0;
+  color: var(--mute);
+}
+.is-open .px-chevron {
+  transform: scaleY(-1);
+  color: var(--lime);
+}
+.px-select-panel {
+  max-height: 288px;
+  overflow-y: auto;
+  padding: 4px;
+}
+.px-select-list {
+  position: relative;
+}
+/* One highlight block for the list, stepping between rows. */
+.px-select-pill {
+  position: absolute;
+  inset: 0 0 auto;
+  background: var(--surface-2);
+  box-shadow: inset 2px 0 0 var(--lime);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 90ms steps(3);
+}
+.px-select-option,
+.px-select-option:hover:not(:disabled) {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  background: none;
+  box-shadow: none;
+  color: var(--soft);
+  text-align: left;
+  font-size: 13px;
+}
+.px-select-option.is-active,
+.px-select-option.is-selected {
+  color: var(--ink);
+}
+.px-select-option.is-selected svg {
+  color: var(--lime);
+}
+.px-select-label {
+  flex: 1;
+  min-width: 0;
+}
+.px-select-empty {
+  padding: 8px 10px;
+  color: var(--mute);
+  font-size: 13px;
+}
+
+/* --- number field --- */
+.px-number-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+/* Three segments; the 2 px gap lets the surface show through as the seam. */
+.px-number {
+  display: inline-flex;
+  gap: 2px;
+}
+.px-number button,
+.px-number input {
+  height: 32px;
+}
+.px-number button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  padding: 0;
+  color: var(--dim);
+}
+.px-number button:hover:not(:disabled) {
+  color: var(--ink);
+}
+.px-number input {
+  padding: 0 4px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.px-number input:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--lime);
+}
+.px-chip {
+  padding: 5px 9px;
+  font-size: 12px;
+}
+
+/* --- colour field --- */
+.px-color {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.px-swatch,
+button.px-swatch:hover:not(:disabled) {
+  width: 26px;
+  height: 22px;
+  padding: 0;
+  flex-shrink: 0;
+  box-shadow:
+    inset 0 0 0 2px rgb(0 0 0 / 0.35),
+    2px 2px 0 #050505;
+}
+/* A near-black swatch would vanish into the dark surface: give it a light edge. */
+.px-swatch.is-dark {
+  box-shadow:
+    inset 0 0 0 2px var(--mute),
+    2px 2px 0 #050505;
+}
+button.px-swatch:hover:not(:disabled) {
+  box-shadow:
+    inset 0 0 0 2px var(--ink),
+    2px 2px 0 #050505;
+}
+.px-swatch.is-static {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+.px-color-value {
+  min-width: 20ch;
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+.px-color-panel {
+  width: 300px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.px-tabs {
+  display: flex;
+  gap: 4px;
+}
+.px-tabs button {
+  flex: 1;
+  padding: 6px 4px;
+  font-size: 12px;
+  color: var(--mute);
+}
+.px-tabs button.on {
+  color: var(--lime);
+  box-shadow: inset 0 0 0 2px var(--lime);
+}
+.px-grid {
+  box-shadow: 0 0 0 2px var(--line);
+}
+.px-grid > div {
+  display: flex;
+}
+.px-grid button,
+.px-grid button:hover:not(:disabled) {
+  flex: 1;
+  aspect-ratio: 1;
+  padding: 0;
+  box-shadow: none;
+}
+.px-grid button:hover:not(:disabled),
+.px-grid button:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--bg);
+}
+.px-grid button.on {
+  position: relative;
+  z-index: 2;
+  box-shadow:
+    inset 0 0 0 2px var(--ink),
+    inset 0 0 0 4px var(--bg);
+}
+.px-spectrum {
+  position: relative;
+  height: 150px;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+  box-shadow: 0 0 0 2px var(--line);
+}
+.px-spectrum-mark {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  translate: -50% -50%;
+  box-shadow:
+    inset 0 0 0 2px #fff,
+    0 0 0 2px #000;
+  pointer-events: none;
+}
+.px-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.px-track {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.px-track-label {
+  width: 28px;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--dim);
+}
+.px-rail {
+  position: relative;
+  flex: 1;
+  height: 12px;
+  touch-action: none;
+  user-select: none;
+  box-shadow: 0 0 0 2px var(--line);
+}
+.px-thumb {
+  position: absolute;
+  top: -4px;
+  width: 8px;
+  height: 20px;
+  translate: -50% 0;
+  background: var(--ink);
+  box-shadow:
+    inset 0 0 0 2px var(--bg),
+    2px 2px 0 #050505;
+  pointer-events: none;
+}
+.px-track-readout {
+  width: 3ch;
+  flex-shrink: 0;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--dim);
+}
+.px-color-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.px-color-row input {
+  flex: 1;
+  min-width: 0;
+  height: 30px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.px-icon-btn {
+  display: grid;
+  place-items: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 6px;
+  font-size: 11px;
+  color: var(--dim);
+}
+.px-icon-btn:hover:not(:disabled) {
+  color: var(--ink);
+}
