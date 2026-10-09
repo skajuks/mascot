@@ -7,6 +7,8 @@ const ICONS = {
   plus: ['..x..', '..x..', 'xxxxx', '..x..', '..x..'],
   minus: ['.....', '.....', 'xxxxx', '.....', '.....'],
   link: ['..xxxx.', '.x....x', '.x..x.x', 'x.x..x.', 'x.x....', '.xxxx..'],
+  arrow: ['...x...', '...xx..', 'xxxxxx.', 'xxxxxxx', 'xxxxxx.', '...xx..', '...x...'],
+  star: ['...x...', '...x...', 'xxxxxxx', '.xxxxx.', '..xxx..', '.xx.xx.', 'x.....x'],
 } as const
 
 export type IconName = keyof typeof ICONS

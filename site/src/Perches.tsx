@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { blob, pix, type Character, type CharacterDef, type PerchAct, type PerchEdge, type PerchOptions, type PerchSize } from 'mascot'
 import { MascotSpot } from 'mascot/react'
 import { NumberField } from './ui/NumberField'
+import { PixelArt } from './ui/PixelArt'
+import { PixelIcon } from './ui/PixelIcon'
 import { Select } from './ui/Select'
 
 // The perch builder: three stand-in components, a list of perches on them, and controls for the
@@ -19,6 +21,27 @@ const TARGETS: { value: Target; label: string }[] = [
 const EDGES: PerchEdge[] = ['top', 'right', 'bottom', 'left']
 const SIZES: PerchSize[] = ['xs', 'sm', 'md', 'lg']
 const ACTS: PerchAct[] = ['idle', 'wander', 'peek', 'sleep', 'dance']
+
+// A 16x16 portrait for the avatar stand-in.
+const FACE = [
+  'gggggggggggggggg',
+  'gggggkkkkkkggggg',
+  'ggggkkkkkkkkgggg',
+  'gggkkkkkkkkkkggg',
+  'gggkkssssssskggg',
+  'gggksssssssskggg',
+  'gggkseesseeskggg',
+  'ggggssssssssgggg',
+  'ggggsssdssssgggg',
+  'ggggssmmmmssgggg',
+  'gggggssssssggggg',
+  'ggggggddddgggggg',
+  'gggttttddttttggg',
+  'ggttttttttttttgg',
+  'gttttttttttttttg',
+  'gttttttttttttttg',
+]
+const FACE_COLORS = { g: '#22302a', k: '#2a1c14', s: '#e8b48a', d: '#c98e66', e: '#141412', m: '#8c4a33', t: '#5fd38d' }
 
 let nextId = 1
 const START: Entry[] = [
@@ -79,18 +102,42 @@ export function Perches({ main }: { main: Character | CharacterDef }) {
   return (
     <div className="perch-lab">
       <div className="perch-stage" data-no-light>
-        <MascotSpot className="perch-card" perch={optionsFor('card')}>
-          <span className="perch-tag">pro</span>
-          <h3>$12 / month</h3>
-          <p>Unlimited mascots. Perches included.</p>
-        </MascotSpot>
+        {/* The hard shadow lives on a wrapper: the card's notched corners would clip its own. */}
+        <div className="perch-card-shadow">
+          <MascotSpot className="perch-card" perch={optionsFor('card')}>
+            <div className="perch-card-head">
+              <span className="perch-tag">pro</span>
+              <span className="perch-popular">
+                <PixelIcon name="star" /> popular
+              </span>
+            </div>
+            <p className="perch-price">
+              <span className="px-title">$12</span> / month
+            </p>
+            <ul className="perch-features">
+              {['Unlimited mascots', 'Perches included', 'Pixel-perfect bubbles'].map(f => (
+                <li key={f}>
+                  <PixelIcon name="check" /> {f}
+                </li>
+              ))}
+            </ul>
+          </MascotSpot>
+        </div>
         <div className="perch-row">
-          <MascotSpot className="px-btn perch-button" perch={optionsFor('button')}>
-            Sign up
+          <MascotSpot className="perch-button" perch={optionsFor('button')}>
+            Start free <PixelIcon name="arrow" />
           </MascotSpot>
-          <MascotSpot className="perch-avatar" perch={optionsFor('avatar')} aria-label="Avatar">
-            RK
-          </MascotSpot>
+          <div className="perch-profile">
+            <MascotSpot className="perch-avatar" perch={optionsFor('avatar')} aria-label="Avatar">
+              <PixelArt rows={FACE} palette={FACE_COLORS} size={4} />
+              <span className="perch-status" aria-hidden="true" />
+            </MascotSpot>
+            <div className="perch-who">
+              <span>Robert S.</span>
+              <span className="dim">@robertskalve</span>
+              <span className="perch-online">online</span>
+            </div>
+          </div>
         </div>
       </div>
 

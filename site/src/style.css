@@ -671,46 +671,139 @@ input[type='checkbox']:checked {
   background: var(--bg);
   box-shadow: inset 0 0 0 2px var(--line);
 }
+.perch-card-shadow {
+  filter: drop-shadow(4px 4px 0 #050505);
+}
+/* Notched corners, the pixel way to round a box. */
+.perch-card,
+.perch-avatar {
+  clip-path: polygon(4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px), 0 4px, 4px 4px);
+}
 .perch-card {
-  position: relative;
-  padding: 22px;
+  padding: 20px 22px 22px;
   background: var(--surface-2);
-  box-shadow:
-    inset 0 0 0 2px var(--line),
-    4px 4px 0 #050505;
+  box-shadow: inset 0 0 0 4px var(--line);
 }
-.perch-card h3 {
-  margin: 8px 0 6px;
-  font-size: 22px;
-  color: var(--ink);
-}
-.perch-card p {
-  margin: 0;
-  color: var(--soft);
-  font-size: 13px;
+.perch-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .perch-tag {
-  display: inline-block;
-  padding: 2px 6px;
+  padding: 3px 8px;
   background: var(--lime);
   color: var(--bg);
   font-size: 11px;
+}
+.perch-popular {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--amber);
+  font-size: 11px;
+}
+.perch-price {
+  margin: 14px 0 12px;
+  color: var(--dim);
+  font-size: 13px;
+}
+.perch-price .px-title {
+  color: var(--ink);
+  font-size: 40px;
+  line-height: 1;
+  text-shadow: 4px 4px 0 #2c2e29;
+}
+.perch-features {
+  list-style: none;
+  margin: 0;
+  padding: 14px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 -2px 0 var(--line);
+  color: var(--soft);
+  font-size: 12px;
+}
+.perch-features svg {
+  color: var(--lime);
+  margin-right: 6px;
 }
 .perch-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 40px;
+  flex-wrap: wrap;
+  gap: 56px 40px;
 }
-.perch-avatar {
-  display: grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  background: var(--ember);
+.perch-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+  padding: 0 20px;
+  background: var(--lime);
   color: var(--bg);
-  font-size: 20px;
-  box-shadow: 4px 4px 0 #050505;
+  font-size: 15px;
+  box-shadow:
+    inset -4px -4px 0 rgb(0 0 0 / 0.25),
+    inset 4px 4px 0 rgb(255 255 255 / 0.3),
+    4px 4px 0 #1f4d2b;
+  cursor: url('/cursors/hand.svg') 8 0, pointer;
+  transition:
+    transform 60ms steps(1),
+    box-shadow 60ms steps(1);
+}
+.perch-button:active {
+  transform: translate(4px, 4px);
+  box-shadow:
+    inset 4px 4px 0 rgb(0 0 0 / 0.25),
+    0 0 0 #1f4d2b;
+}
+.perch-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+/* A 4 px ink frame around the portrait, notched like the card. */
+.perch-avatar {
+  position: relative;
+  padding: 4px;
+  background: var(--ink);
+  line-height: 0;
+}
+.perch-avatar svg {
+  display: block;
+}
+.perch-status {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 12px;
+  height: 12px;
+  background: var(--lime);
+  box-shadow: 0 0 0 3px var(--ink);
+  animation: perch-status 1.6s steps(1) infinite;
+}
+@keyframes perch-status {
+  60% {
+    background: #1f7a45;
+  }
+}
+.perch-who {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+}
+.perch-who .dim {
+  font-size: 11px;
+}
+.perch-online {
+  color: var(--lime);
+  font-size: 11px;
+}
+.perch-online::before {
+  content: '> ';
 }
 .perch-panel {
   display: flex;
