@@ -886,3 +886,52 @@ input[type='checkbox']:checked {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
   gap: 24px;
 }
+
+/* --- narrow screens --- */
+/* Grid children default to min-width: auto, so a long code line would widen the whole page. */
+.perch-lab > *,
+.perch-code > div,
+.grid > * {
+  min-width: 0;
+}
+.perch-list li > button:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 720px) {
+  .nav {
+    gap: 16px;
+    font-size: 12px;
+  }
+  .card {
+    padding: 16px;
+  }
+  .perch-lab {
+    gap: 28px;
+  }
+  .perch-stage {
+    gap: 56px;
+    padding: 48px 28px;
+  }
+  .perch-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .perch-player {
+    width: 100%;
+    max-width: 280px;
+  }
+  .perch-controls .px-field-label {
+    width: 44px;
+  }
+  .perch-seg {
+    flex-wrap: wrap;
+  }
+}
+/* Too narrow for every link: keep the two that matter most. */
+@media (max-width: 520px) {
+  .nav a[href='#spots'],
+  .nav a[href='#integrate'] {
+    display: none;
+  }
+}
