@@ -8,6 +8,7 @@ const ICONS = {
   minus: ['.....', '.....', 'xxxxx', '.....', '.....'],
   link: ['..xxxx.', '.x....x', '.x..x.x', 'x.x..x.', 'x.x....', '.xxxx..'],
   arrow: ['...x...', '...xx..', 'xxxxxx.', 'xxxxxxx', 'xxxxxx.', '...xx..', '...x...'],
+  play: ['x....', 'xxx..', 'xxxxx', 'xxx..', 'x....'],
   star: ['...x...', '...x...', 'xxxxxxx', '.xxxxx.', '..xxx..', '.xx.xx.', 'x.....x'],
 } as const
 

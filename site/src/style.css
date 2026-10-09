@@ -676,7 +676,7 @@ input[type='checkbox']:checked {
 }
 /* Notched corners, the pixel way to round a box. */
 .perch-card,
-.perch-avatar {
+.perch-player {
   clip-path: polygon(4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px), 0 4px, 4px 4px);
 }
 .perch-card {
@@ -759,51 +759,75 @@ input[type='checkbox']:checked {
     inset 4px 4px 0 rgb(0 0 0 / 0.25),
     0 0 0 #1f4d2b;
 }
-.perch-profile {
+/* A tiny music player: equalizer bars as the cover, the track, a progress bar filling in steps. */
+.perch-player {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
+  width: 260px;
+  padding: 12px;
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 4px var(--line);
+  font-size: 12px;
 }
-/* A 4 px ink frame around the portrait, notched like the card. */
-.perch-avatar {
-  position: relative;
-  padding: 4px;
-  background: var(--ink);
-  line-height: 0;
+.perch-eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  padding: 8px 6px;
+  background: var(--bg);
 }
-.perch-avatar svg {
-  display: block;
+.perch-eq span {
+  flex: 1;
+  background: var(--amber);
+  animation: perch-eq 0.85s steps(4) infinite alternate;
 }
-.perch-status {
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
-  width: 12px;
-  height: 12px;
-  background: var(--lime);
-  box-shadow: 0 0 0 3px var(--ink);
-  animation: perch-status 1.6s steps(1) infinite;
+.perch-eq span:nth-child(2n) {
+  background: var(--ember);
 }
-@keyframes perch-status {
-  60% {
-    background: #1f7a45;
+@keyframes perch-eq {
+  from {
+    height: 20%;
+  }
+  to {
+    height: 100%;
   }
 }
-.perch-who {
+.perch-track {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  font-size: 13px;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
 }
-.perch-who .dim {
+.perch-track .dim {
   font-size: 11px;
 }
-.perch-online {
+.perch-progress {
+  height: 6px;
+  margin-top: 6px;
+  background: var(--bg);
+}
+.perch-progress span {
+  display: block;
+  height: 100%;
+  background: var(--lime);
+  animation: perch-progress 14s steps(28) infinite;
+}
+@keyframes perch-progress {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+.perch-play {
+  flex-shrink: 0;
   color: var(--lime);
-  font-size: 11px;
-}
-.perch-online::before {
-  content: '> ';
 }
 .perch-panel {
   display: flex;

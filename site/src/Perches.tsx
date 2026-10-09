@@ -2,53 +2,31 @@ import { useState } from 'react'
 import { blob, pix, type Character, type CharacterDef, type PerchAct, type PerchEdge, type PerchOptions, type PerchSize } from 'mascot'
 import { MascotSpot } from 'mascot/react'
 import { NumberField } from './ui/NumberField'
-import { PixelArt } from './ui/PixelArt'
 import { PixelIcon } from './ui/PixelIcon'
 import { Select } from './ui/Select'
 
 // The perch builder: three stand-in components, a list of perches on them, and controls for the
 // selected one. Every change is live on the page, and the code below is what you'd write for it.
 
-type Target = 'card' | 'button' | 'avatar'
+type Target = 'card' | 'button' | 'player'
 type Who = 'main' | 'pix' | 'blob'
 type Entry = { id: number; target: Target; edge: PerchEdge; at: number; size: PerchSize; act: PerchAct; who: Who; emote: string }
 
 const TARGETS: { value: Target; label: string }[] = [
   { value: 'card', label: 'pricing card' },
   { value: 'button', label: 'button' },
-  { value: 'avatar', label: 'avatar' },
+  { value: 'player', label: 'music player' },
 ]
 const EDGES: PerchEdge[] = ['top', 'right', 'bottom', 'left']
 const SIZES: PerchSize[] = ['xs', 'sm', 'md', 'lg']
 const ACTS: PerchAct[] = ['idle', 'wander', 'peek', 'sleep', 'dance']
-
-// A 16x16 portrait for the avatar stand-in.
-const FACE = [
-  'gggggggggggggggg',
-  'gggggkkkkkkggggg',
-  'ggggkkkkkkkkgggg',
-  'gggkkkkkkkkkkggg',
-  'gggkkssssssskggg',
-  'gggksssssssskggg',
-  'gggkseesseeskggg',
-  'ggggssssssssgggg',
-  'ggggsssdssssgggg',
-  'ggggssmmmmssgggg',
-  'gggggssssssggggg',
-  'ggggggddddgggggg',
-  'gggttttddttttggg',
-  'ggttttttttttttgg',
-  'gttttttttttttttg',
-  'gttttttttttttttg',
-]
-const FACE_COLORS = { g: '#22302a', k: '#2a1c14', s: '#e8b48a', d: '#c98e66', e: '#141412', m: '#8c4a33', t: '#5fd38d' }
 
 let nextId = 1
 const START: Entry[] = [
   { id: nextId++, target: 'card', edge: 'top', at: 78, size: 'md', act: 'wander', who: 'main', emote: '' },
   { id: nextId++, target: 'card', edge: 'right', at: 30, size: 'sm', act: 'peek', who: 'main', emote: '' },
   { id: nextId++, target: 'button', edge: 'bottom', at: 25, size: 'xs', act: 'idle', who: 'pix', emote: '' },
-  { id: nextId++, target: 'avatar', edge: 'top', at: 50, size: 'sm', act: 'sleep', who: 'blob', emote: '' },
+  { id: nextId++, target: 'player', edge: 'top', at: 30, size: 'sm', act: 'dance', who: 'blob', emote: 'happy' },
 ]
 
 const describe = (e: Entry) => [e.edge, `${e.at}%`, e.size, e.act, e.emote].filter(Boolean).join(' ')
@@ -127,17 +105,21 @@ export function Perches({ main }: { main: Character | CharacterDef }) {
           <MascotSpot className="perch-button" perch={optionsFor('button')}>
             Start free <PixelIcon name="arrow" />
           </MascotSpot>
-          <div className="perch-profile">
-            <MascotSpot className="perch-avatar" perch={optionsFor('avatar')} aria-label="Avatar">
-              <PixelArt rows={FACE} palette={FACE_COLORS} size={4} />
-              <span className="perch-status" aria-hidden="true" />
-            </MascotSpot>
-            <div className="perch-who">
-              <span>Robert S.</span>
-              <span className="dim">@robertskalve</span>
-              <span className="perch-online">online</span>
-            </div>
-          </div>
+          <MascotSpot className="perch-player" perch={optionsFor('player')} aria-label="Music player">
+            <span className="perch-eq" aria-hidden="true">
+              {[0, 1, 2, 3, 4].map(i => (
+                <span key={i} style={{ animationDelay: `${-i * 170}ms` }} />
+              ))}
+            </span>
+            <span className="perch-track">
+              <span>Pixel Dreams</span>
+              <span className="dim">Pix & the Blobs</span>
+              <span className="perch-progress" aria-hidden="true">
+                <span />
+              </span>
+            </span>
+            <PixelIcon name="play" className="perch-play" />
+          </MascotSpot>
         </div>
       </div>
 
