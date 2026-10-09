@@ -185,7 +185,6 @@ a {
   gap: 28px;
   padding: 0 clamp(16px, 4vw, 48px);
   background: rgb(12 12 11 / 0.92);
-  box-shadow: 0 2px 0 var(--line);
   font-size: 14px;
 }
 .nav a {
@@ -229,9 +228,16 @@ a {
   color: var(--soft);
 }
 .terminal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   max-width: 520px;
-  padding: 18px 22px;
+  padding: 12px 12px 12px 22px;
   font-size: 18px;
+}
+.terminal-copy {
+  flex-shrink: 0;
 }
 .prompt {
   color: var(--lime);

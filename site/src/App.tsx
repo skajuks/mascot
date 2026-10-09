@@ -4,6 +4,7 @@ import { MascotProvider, MascotSpot, useMascot, useMascotEvent } from 'mascot/re
 import { Backdrop } from './Backdrop'
 import { Editor } from './Editor'
 import { PixLogo } from './PixLogo'
+import { PixelIcon } from './ui/PixelIcon'
 
 const NAV_HEIGHT = 64
 
@@ -50,7 +51,7 @@ export function App() {
             point at, naps when they leave, and does whatever your app tells it to.
           </p>
           <MascotSpot home className="card terminal" say={['That is me!', 'Hover things. I talk about them.', 'One install. No dependencies.']}>
-            <span className="prompt">$</span> npm i mascot<span className="caret" aria-hidden="true" />
+            <InstallLine command="npm i mascot" />
           </MascotSpot>
           <div className="hero-cta">
             <a className="px-btn" href="#editor">
@@ -113,6 +114,32 @@ export function App() {
         </MascotSpot>
       </div>
     </MascotProvider>
+  )
+}
+
+function InstallLine({ command }: { command: string }) {
+  const mascot = useMascot()
+  const [copied, setCopied] = useState(false)
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(command)
+      setCopied(true)
+      mascot.say('Copied! Paste me anywhere.', 1800)
+      setTimeout(() => setCopied(false), 1500)
+    } catch {
+      mascot.say('Clipboard said no. Select it by hand.', 2200)
+    }
+  }
+  return (
+    <>
+      <span>
+        <span className="prompt">$</span> {command}
+        <span className="caret" aria-hidden="true" />
+      </span>
+      <button type="button" className="px-icon-btn terminal-copy" onClick={copy} aria-label={copied ? 'Copied' : `Copy ${command}`} title="Copy">
+        <PixelIcon name={copied ? 'check' : 'copy'} />
+      </button>
+    </>
   )
 }
 
