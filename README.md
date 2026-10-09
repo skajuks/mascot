@@ -8,7 +8,7 @@ Grown out of Pix, the robot on robertskalve.lv. No dependencies; React bindings 
 
 ```sh
 npm i mascot   # name to be decided before publishing: "mascot" is taken on npm
-npm run dev    # playground with a demo page and a character editor
+npm run dev    # site with a demo page and the character editor (mascot.robertskalve.lv)
 ```
 
 ## Quick start
@@ -176,5 +176,5 @@ Missing poses fall back: held → air → idle, sleep → blink → idle, everyt
 Frames can also be images (`{ src, width, height }`, in grid units) for art made elsewhere, and
 `matrixFromImage(img)` turns a PNG into a matrix and palette.
 
-The easiest way is the **editor** in the playground (`npm run dev`): paint layers and poses, preview
+The easiest way is the **editor** on the site (`npm run dev`): paint layers and poses, preview
 the animation, import a PNG, try it on the page, and copy the code.

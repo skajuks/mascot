@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 
 const src = (path: string) => fileURLToPath(new URL(`../src/${path}`, import.meta.url))
 
-// The playground imports the library by its package name, straight from source.
+// The site imports the library by its package name, straight from source.
 export default defineConfig({
   plugins: [react()],
   resolve: {

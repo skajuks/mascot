@@ -113,7 +113,7 @@ export function Editor({ onUse }: { onUse: (def: CharacterDef) => void }) {
     canvas.height = h
     for (let y = 0; y < ed.height; y++)
       for (let x = 0; x < ed.width; x++) {
-        ctx.fillStyle = (x + y) % 2 ? '#1b1c1f' : '#222327'
+        ctx.fillStyle = (x + y) % 2 ? '#121311' : '#171816'
         ctx.fillRect(x * cell, y * cell, cell, cell)
       }
     for (const l of ed.layers) {
@@ -214,7 +214,7 @@ export function Editor({ onUse }: { onUse: (def: CharacterDef) => void }) {
     const tick = (now: number) => {
       raf = requestAnimationFrame(tick)
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.fillStyle = '#2a2b30'
+      ctx.fillStyle = '#1e1f1c'
       ctx.fillRect(0, canvas.height - 24, canvas.width, 24)
       if (!character) return
       if (now > nextBlink) {
@@ -373,7 +373,7 @@ export function Editor({ onUse }: { onUse: (def: CharacterDef) => void }) {
               <li key={l.id}>
                 <button className={l.id === layer?.id ? 'on' : ''} onClick={() => (setLayerId(l.id), setFrameIdx(0))}>
                   {l.name}
-                  {l.look ? ' 👀' : ''}
+                  {l.look ? <span className="ed-tag">look</span> : null}
                 </button>
               </li>
             ))}

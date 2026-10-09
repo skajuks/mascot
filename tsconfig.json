@@ -30,7 +30,7 @@
   },
   "include": [
     "src",
-    "playground/src",
-    "playground/vite.config.ts"
+    "site/src",
+    "site/vite.config.ts"
   ]
 }
