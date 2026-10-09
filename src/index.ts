@@ -1,5 +1,7 @@
 export { createMascot } from './core/mascot.js'
 export type { ElementConfig, Features, Mascot, MascotEvents, MascotOptions, MascotPlugin, MenuItem, PluginHooks, PluginKit } from './core/mascot.js'
+export { parsePerchAttr } from './core/perches.js'
+export type { Perch, PerchAct, PerchEdge, PerchOptions, PerchSize } from './core/perches.js'
 export { defineCharacter, parseMatrix } from './core/character.js'
 export type { Character, CharacterDef, Frame, FrameSet, LayerDef, State } from './core/character.js'
 export { drawCharacter, matrixFromImage, matrixSvg } from './core/render.js'

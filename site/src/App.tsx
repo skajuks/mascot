@@ -3,6 +3,7 @@ import { blob, pix, type Character, type CharacterDef, type Features } from 'mas
 import { MascotProvider, MascotSpot, useMascot, useMascotEvent } from 'mascot/react'
 import { Backdrop } from './Backdrop'
 import { Editor } from './Editor'
+import { Perches } from './Perches'
 import { PixLogo } from './PixLogo'
 import { PixelIcon } from './ui/PixelIcon'
 
@@ -33,13 +34,14 @@ export function App() {
     >
       <div className="page">
         <Backdrop light={flashlight} />
-        <nav className="nav" style={{ height: NAV_HEIGHT }}>
+        <nav className="nav" style={{ height: NAV_HEIGHT }} data-mascot-perch="bottom 88% sm" data-mascot-perch-say="hang in there|it's a long way down|hi from up here">
           <a href="#top" className="logo">
             <PixLogo />
             mascot
           </a>
           <a href="#spots">spots</a>
           <a href="#integrate">integrate</a>
+          <a href="#perches">perches</a>
           <a href="#editor">editor</a>
         </nav>
 
@@ -95,11 +97,20 @@ export function App() {
           </MascotSpot>
         </div>
 
-        <Section id="editor" n="03" title="Make your own" says={['This is where I was born.', 'Paint me a friend.']}>
+        <Section id="perches" n="03" title="Perches" says={['My little cousins.', 'They live on your components.']}>
+          Small extra copies of your mascot, anchored where you want them and at the size you want. Feet on any edge of any element:
+          standing on top, hanging below, clinging to a side. They idle, wander, peek out from behind, nap or dance, glance at the
+          cursor and hop when clicked. Pick one below and move it around.
+        </Section>
+        <MascotSpot spot className="card perch-card-wrap">
+          <Perches main={character} />
+        </MascotSpot>
+
+        <Section id="editor" n="04" title="Make your own" says={['This is where I was born.', 'Paint me a friend.']}>
           A character is a stack of pixel layers. Each layer has frames per pose, so blinking only swaps the eyes and walking only
           animates the legs. Paint one here or import a PNG, try it on the page, then copy the code into your project.
         </Section>
-        <MascotSpot spot className="card editor-card" data-no-light>
+        <MascotSpot spot className="card editor-card" data-no-light perch={{ edge: 'right', at: 0.12, size: 'sm', act: 'peek' }}>
           <Editor
             onUse={(def, opts) => {
               setCharacter(def)
@@ -108,7 +119,7 @@ export function App() {
           />
         </MascotSpot>
 
-        <MascotSpot as="footer" spot className="footer" chatter="The floor. My favorite.">
+        <MascotSpot as="footer" spot className="footer" chatter="The floor. My favorite." perch={{ edge: 'top', at: 0.92, size: 'xs', act: 'sleep' }}>
           <span>Grown out of Pix, the robot below the rift on robertskalve.lv.</span>
           <span className="dim">MIT</span>
         </MascotSpot>

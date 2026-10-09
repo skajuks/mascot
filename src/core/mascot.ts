@@ -14,6 +14,7 @@ import { Particles } from './particles.js'
 import { capSpeed, collectSurfaces, screenFloor, stepBody, topOf, type Body, type Surface } from './physics.js'
 import { createSprite, matrixSvg, type Sprite } from './render.js'
 import { injectStyles } from './styles.js'
+import { createPerchLayer, type Perch, type PerchLayer, type PerchOptions } from './perches.js'
 import { pix } from '../characters/pix.js'
 
 // ---------------------------------------------------------------------------------------------
@@ -103,6 +104,8 @@ export type MascotEvents = {
   fetch: { count: number }
   state: { state: State }
   menu: { open: boolean }
+  /** A perch was clicked. */
+  perch: { el: Element; count: number }
 }
 
 export type PluginKit = {
@@ -144,6 +147,8 @@ export type Mascot = {
   setLines(lines: Partial<LineBook>): void
   setMenu(items: MenuItem[] | undefined, title?: string): void
   setFeatures(features: Partial<Features>): void
+  /** Put a small extra mascot on an element. See PerchOptions. */
+  perch(el: Element, options?: PerchOptions): Perch
   show(): void
   hide(): void
   destroy(): void
@@ -717,6 +722,21 @@ export function createMascot(options: MascotOptions = {}): Mascot {
     for (const el of document.querySelectorAll(`[${ATTRS.enter}]`)) if (!entered.has(el)) io.observe(el)
     for (const [el, c] of registry) if (c.enter !== undefined && !entered.has(el)) io.observe(el)
   }
+  // Perches get their own canvas, made the first time one is needed.
+  let perchLayer: PerchLayer | null = null
+  const perches = () =>
+    (perchLayer ??= createPerchLayer({
+      character: () => char,
+      lines: () => lines.perch,
+      zIndex: opts.zIndex,
+      reduced,
+      themeEl: root,
+      onPoke: (el, count) => events.emit('perch', { el, count }),
+    }))
+  const syncPerches = () => {
+    if (perchLayer || document.querySelector('[data-mascot-perch]')) perches().sync()
+  }
+
   let mutationQueued = false
   const mo = new MutationObserver(() => {
     if (mutationQueued) return
@@ -724,13 +744,15 @@ export function createMascot(options: MascotOptions = {}): Mascot {
     requestAnimationFrame(() => {
       mutationQueued = false
       observeEnters()
+      syncPerches()
       queueSpot()
     })
   })
 
   sizeFx()
   observeEnters()
-  mo.observe(document.body, { childList: true, subtree: true })
+  syncPerches()
+  mo.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-mascot-perch', 'data-mascot-perch-say'] })
   window.addEventListener('pointermove', onPointerMove, { passive: true })
   window.addEventListener('pointerup', onPointerUp)
   window.addEventListener('pointercancel', onPointerUp)
@@ -1095,8 +1117,10 @@ export function createMascot(options: MascotOptions = {}): Mascot {
       Object.assign(features, f)
       applyFeatures()
     },
+    perch: (el, options) => perches().add(el, options),
     show: () => {
       s.hidden = false
+      perchLayer?.setHidden(false)
       root.hidden = false
       ballEl.hidden = !features.ball || !ball.placed
     },
@@ -1105,6 +1129,7 @@ export function createMascot(options: MascotOptions = {}): Mascot {
       s.hidden = true
       root.hidden = true
       ballEl.hidden = true
+      perchLayer?.setHidden(true)
       fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height)
     },
     destroy: () => {
@@ -1130,6 +1155,7 @@ export function createMascot(options: MascotOptions = {}): Mascot {
       root.remove()
       ballEl.remove()
       fxCanvas.remove()
+      perchLayer?.destroy()
     },
   }
 

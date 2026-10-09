@@ -36,6 +36,8 @@ export type LineBook = {
   giveUp: Lines
   /** Hovering the ball. */
   ball: Lines
+  /** Perches: clicked, or greeting a cursor that comes close. */
+  perch: Lines
 }
 
 export const DEFAULT_LINES: LineBook = {
@@ -51,6 +53,7 @@ export const DEFAULT_LINES: LineBook = {
   fetched: ['Again!', 'Here you go.', 'Throw it further!'],
   giveUp: ['I lost it.', 'Too far.'],
   ball: ['Throw it!', 'Ooh, the ball.'],
+  perch: ['hi!', 'hey', 'boo!', 'oi!', 'yes?', 'psst', '!!'],
 }
 
 const last = new WeakMap<object, number>()

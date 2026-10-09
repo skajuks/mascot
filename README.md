@@ -105,6 +105,40 @@ createMascot({ plugins: [confetti] })
 same character on your own canvas, for loaders, games and reveal animations. `Particles` is exported
 too.
 
+## Perches
+
+Small extra copies of the mascot that live on elements you pick, at the size you pick. Their feet
+go on one edge of the element: standing on the top, hanging upside down from the bottom, or clinging
+to a side. Each is clipped at its edge, so the element hides whatever is behind it (that's how
+`peek` ducks down) with no z-index work on your side. They glance at a nearby cursor, sometimes say
+hi, and hop when clicked.
+
+```html
+<div class="pricing" data-mascot-perch="top 80% md wander; right 30% sm peek"
+     data-mascot-perch-say="Pick me!|Best plan.">...</div>
+```
+
+```tsx
+<MascotSpot perch={[{ edge: 'top', at: 0.8, size: 'md', act: 'wander' }, { edge: 'right', at: 0.3, act: 'peek', character: blob }]}>
+```
+
+```js
+const p = mascot.perch(document.querySelector('.avatar'), { edge: 'top', size: 'xs', act: 'sleep' })
+p.say('zzz...'); p.update({ act: 'dance' }); p.remove()
+```
+
+| Option      | Values                                          | Default     |
+| ----------- | ----------------------------------------------- | ----------- |
+| `edge`      | `top`, `bottom`, `left`, `right`                | `top`       |
+| `at`        | 0..1 along the edge (attribute: `30%`)          | `0.5`       |
+| `size`      | `xs`, `sm`, `md`, `lg` (1-4 px per pixel) or a number (attribute: `3x`) | `sm` |
+| `act`       | `idle`, `wander`, `peek`, `sleep`, `dance`      | `idle`      |
+| `character` | any character (JS/React only)                   | the page mascot |
+| `emote`     | an emote to hold (attribute: any other word)    |             |
+| `say`       | lines (attribute: `data-mascot-perch-say`)      | `lines.perch` |
+
+Clicks fire a `perch` event: `mascot.on('perch', ({ el, count }) => ...)`.
+
 ## Options
 
 | Option         | Default                | |

@@ -15,6 +15,7 @@ import {
   type RefObject,
 } from 'react'
 import { createMascot, type ElementConfig, type Mascot, type MascotEvents, type MascotOptions } from '../core/mascot.js'
+import type { Perch, PerchOptions } from '../core/perches.js'
 
 type Ctx = { handle: MascotHandle; instance: Mascot | null }
 const MascotContext = createContext<Ctx | null>(null)
@@ -134,22 +135,50 @@ export function useMascotSpot(ref: RefObject<Element | null>, config: ElementCon
   }, [instance, ref, live])
 }
 
+/**
+ * Puts small extra mascots (perches) on an element: one per options object. Options can change
+ * every render; perches are only recreated when how many there are changes.
+ */
+export function useMascotPerch(ref: RefObject<Element | null>, options: PerchOptions | PerchOptions[] | undefined) {
+  const { instance } = useCtx('useMascotPerch')
+  const list = options === undefined ? [] : Array.isArray(options) ? options : [options]
+  const handles = useRef<Perch[]>([])
+  useEffect(() => {
+    const el = ref.current
+    if (!instance || !el || list.length === 0) return
+    handles.current = list.map(o => instance.perch(el, o))
+    return () => {
+      handles.current.forEach(h => h.remove())
+      handles.current = []
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [instance, ref, list.length])
+  // Keep live perches in sync with the latest options (cheap: just copies fields).
+  useEffect(() => {
+    handles.current.forEach((h, i) => list[i] && h.update(list[i]))
+  })
+}
+
 export type MascotSpotProps = ElementConfig &
   HTMLAttributes<HTMLElement> & {
     /** Element to render. Default 'div'. */
     as?: string
     /** Shorthand for `spot: 'home'`: where the mascot first appears. */
     home?: boolean
+    /** Small extra mascots living on this element. */
+    perch?: PerchOptions | PerchOptions[]
   }
 
 /**
  * An element with mascot behavior.
  * `<MascotSpot as="section" spot say={['Nice, right?']} enter="This is the pricing.">...</MascotSpot>`
  */
-export function MascotSpot({ as = 'div', spot, home, say, enter, click, chatter, children, ...rest }: MascotSpotProps) {
+export function MascotSpot({ as = 'div', spot, home, say, enter, click, chatter, perch, children, ...rest }: MascotSpotProps) {
   const ref = useRef<HTMLElement>(null)
   useMascotSpot(ref, { spot: home ? 'home' : spot, say, enter, click, chatter })
+  useMascotPerch(ref, perch)
   return createElement(as, { ...rest, ref }, children)
 }
 
 export type { ElementConfig, Mascot, MascotEvents, MascotOptions } from '../core/mascot.js'
+export type { Perch, PerchOptions } from '../core/perches.js'

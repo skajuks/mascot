@@ -87,6 +87,14 @@ const CSS = /* css */ `
 .mascot .mascot-menu button:is(:hover, :focus-visible)::before { opacity: 1; }
 .mascot .mascot-menu button:is(:hover, :focus-visible) { color: var(--mascot-accent, #5fd38d); }
 
+.mascot-perches {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+.mascot-perches[hidden] { display: none; }
 .mascot-fx {
   position: fixed;
   inset: 0;
