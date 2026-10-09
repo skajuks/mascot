@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
-import { blob, defineCharacter, drawCharacter, matrixFromImage, pix, type Character, type CharacterDef, type State } from 'mascot'
+import { blob, defineCharacter, drawCharacter, matrixFromImage, pix, type Character, type CharacterDef, type State } from '@robertskalve/mascot'
 import {
   blankFrame,
   fromCharacter,

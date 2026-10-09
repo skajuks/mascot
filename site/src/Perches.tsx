@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { blob, pix, type Character, type CharacterDef, type PerchAct, type PerchEdge, type PerchOptions, type PerchSize } from 'mascot'
-import { MascotSpot } from 'mascot/react'
+import { blob, pix, type Character, type CharacterDef, type PerchAct, type PerchEdge, type PerchOptions, type PerchSize } from '@robertskalve/mascot'
+import { MascotSpot } from '@robertskalve/mascot/react'
 import { NumberField } from './ui/NumberField'
 import { PixelIcon } from './ui/PixelIcon'
 import { Select } from './ui/Select'

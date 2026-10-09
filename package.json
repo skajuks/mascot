@@ -1,5 +1,5 @@
 {
-  "name": "mascot",
+  "name": "@robertskalve/mascot",
   "version": "0.1.0",
   "description": "A tiny pixel mascot that lives on your site: walks on your layout, talks about what visitors hover, and plugs into your own features.",
   "license": "MIT",
@@ -8,6 +8,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

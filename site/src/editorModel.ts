@@ -2,7 +2,7 @@
 // Converting back to a CharacterDef crops each layer to the box its pixels use, which keeps the
 // exported code small and readable.
 
-import type { Character, CharacterDef, FrameSet, LayerDef } from 'mascot'
+import type { Character, CharacterDef, FrameSet, LayerDef } from '@robertskalve/mascot'
 
 export type EdLayer = {
   id: string
@@ -160,7 +160,7 @@ export function toCode(ed: EdChar): string {
   const palette = Object.entries(def.palette)
     .map(([k, v]) => `${JSON.stringify(k)}: ${JSON.stringify(v)}`)
     .join(', ')
-  return `import { defineCharacter } from 'mascot'
+  return `import { defineCharacter } from '@robertskalve/mascot'
 
 export const ${lowerFirst(ident(ed.name))} = defineCharacter({
   name: ${JSON.stringify(ed.name)},

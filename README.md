@@ -7,7 +7,7 @@ when they leave, and does whatever your app tells it to.
 Grown out of Pix, the robot on robertskalve.lv. No dependencies; React bindings optional.
 
 ```sh
-npm i mascot   # name to be decided before publishing: "mascot" is taken on npm
+npm i @robertskalve/mascot
 npm run dev    # site with a demo page and the character editor (mascot.robertskalve.lv)
 ```
 
@@ -21,7 +21,7 @@ npm run dev    # site with a demo page and the character editor (mascot.robertsk
 ```
 
 ```js
-import { createMascot } from 'mascot'
+import { createMascot } from '@robertskalve/mascot'
 
 const mascot = createMascot({ ceiling: 64 }) // 64 = height of a fixed header to stay under
 mascot.say('Saved!')
@@ -30,7 +30,7 @@ mascot.say('Saved!')
 ### React
 
 ```tsx
-import { MascotProvider, MascotSpot, useMascot } from 'mascot/react'
+import { MascotProvider, MascotSpot, useMascot } from '@robertskalve/mascot/react'
 
 <MascotProvider ceiling={64} lines={{ greet: ['Welcome to Acme!'] }}>
   <MascotSpot as="section" home say={['This is the hero.', 'Hover more stuff!']}>...</MascotSpot>
@@ -169,7 +169,7 @@ blink only swaps the eyes and a walk only animates the legs. Frames are char mat
 pixel, looked up in the palette; anything not in the palette (use `.`) is transparent.
 
 ```ts
-import { defineCharacter } from 'mascot'
+import { defineCharacter } from '@robertskalve/mascot'
 
 export const bot = defineCharacter({
   name: 'Bot',

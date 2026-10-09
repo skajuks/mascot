@@ -9,8 +9,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: [
-      { find: /^mascot\/react$/, replacement: src('react/index.tsx') },
-      { find: /^mascot$/, replacement: src('index.ts') },
+      { find: /^@robertskalve\/mascot\/react$/, replacement: src('react/index.tsx') },
+      { find: /^@robertskalve\/mascot$/, replacement: src('index.ts') },
     ],
   },
 })

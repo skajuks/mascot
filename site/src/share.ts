@@ -2,7 +2,7 @@
 // Links come from strangers, so decoding rebuilds the definition field by field and keeps only what a
 // pixel character needs: hex colours, char matrices, small grids. No image frames (they'd load any URL).
 
-import { defineCharacter, type CharacterDef, type FrameSet, type LayerDef } from 'mascot'
+import { defineCharacter, type CharacterDef, type FrameSet, type LayerDef } from '@robertskalve/mascot'
 
 const PREFIX = 'c='
 const MAX_GRID = 48

@@ -20,10 +20,10 @@
       "node"
     ],
     "paths": {
-      "mascot": [
+      "@robertskalve/mascot": [
         "./src/index.ts"
       ],
-      "mascot/react": [
+      "@robertskalve/mascot/react": [
         "./src/react/index.tsx"
       ]
     }

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { drawCharacter, pix } from 'mascot'
+import { drawCharacter, pix } from '@robertskalve/mascot'
 
 // Pix in the navbar, drawn with the library itself: blinks now and then, the on-air light pulses,
 // and the eyes follow the cursor around the page.

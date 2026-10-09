@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
-import { blob, pix, type Character, type CharacterDef, type Features } from 'mascot'
-import { MascotProvider, MascotSpot, useMascot, useMascotEvent } from 'mascot/react'
+import { blob, pix, type Character, type CharacterDef, type Features } from '@robertskalve/mascot'
+import { MascotProvider, MascotSpot, useMascot, useMascotEvent } from '@robertskalve/mascot/react'
 import { Backdrop } from './Backdrop'
 import { Editor } from './Editor'
 import { Perches } from './Perches'
@@ -53,7 +53,7 @@ export function App() {
             point at, naps when they leave, and does whatever your app tells it to.
           </p>
           <MascotSpot home className="card terminal" say={['That is me!', 'Hover things. I talk about them.', 'One install. No dependencies.']}>
-            <InstallLine command="npm i mascot" />
+            <InstallLine command="npm i @robertskalve/mascot" />
           </MascotSpot>
           <div className="hero-cta">
             <a className="px-btn" href="#editor">
