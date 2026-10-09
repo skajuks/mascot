@@ -8,6 +8,8 @@ const ICONS = {
   minus: ['.....', '.....', 'xxxxx', '.....', '.....'],
   link: ['..xxxx.', '.x....x', '.x..x.x', 'x.x..x.', 'x.x....', '.xxxx..'],
   arrow: ['...x...', '...xx..', 'xxxxxx.', 'xxxxxxx', 'xxxxxx.', '...xx..', '...x...'],
+  // The GitHub mark: a disc with the octocat cut out of it.
+  github: ['.....xxxxxx.....', '...xxxxxxxxxx...', '..xxxxxxxxxxxx..', '.xxx.xxxxxx.xxx.', '.xxx..xxxx..xxx.', 'xxxx........xxxx', 'xxx..........xxx', 'xxx..........xxx', 'xxx..........xxx', 'xxxx........xxxx', 'xxxxxx....xxxxxx', '.x.xxx....xxxxx.', '.xx.......xxxxx.', '..xxxx....xxxx..', '...xxx....xxx...', '.....x....x.....'],
   play: ['x....', 'xxx..', 'xxxxx', 'xxx..', 'x....'],
   star: ['...x...', '...x...', 'xxxxxxx', '.xxxxx.', '..xxx..', '.xx.xx.', 'x.....x'],
 } as const

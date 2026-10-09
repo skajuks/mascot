@@ -931,7 +931,22 @@ input[type='checkbox']:checked {
 /* Too narrow for every link: keep the two that matter most. */
 @media (max-width: 520px) {
   .nav a[href='#spots'],
-  .nav a[href='#integrate'] {
+  .nav a[href='#integrate'],
+  .nav a[href*='npmjs.com'] {
     display: none;
   }
+}
+
+.nav .nav-icon {
+  display: grid;
+  place-items: center;
+  color: var(--dim);
+}
+.nav .nav-icon:hover {
+  color: var(--ink);
+}
+.footer-links {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
 }

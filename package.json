@@ -3,6 +3,25 @@
   "version": "0.1.0",
   "description": "A tiny pixel mascot that lives on your site: walks on your layout, talks about what visitors hover, and plugs into your own features.",
   "license": "MIT",
+  "author": "Roberts Kalve",
+  "homepage": "https://github.com/skajuks/mascot#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skajuks/mascot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/skajuks/mascot/issues"
+  },
+  "keywords": [
+    "mascot",
+    "pixel",
+    "pixel-art",
+    "sprite",
+    "character",
+    "website",
+    "react",
+    "widget"
+  ],
   "type": "module",
   "sideEffects": false,
   "files": [

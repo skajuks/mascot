@@ -6,6 +6,8 @@ when they leave, and does whatever your app tells it to.
 
 Grown out of Pix, the robot on robertskalve.lv. No dependencies; React bindings optional.
 
+[npm](https://www.npmjs.com/package/@robertskalve/mascot) · [GitHub](https://github.com/skajuks/mascot)
+
 ```sh
 npm i @robertskalve/mascot
 npm run dev    # site with a demo page and the character editor (mascot.robertskalve.lv)

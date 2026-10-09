@@ -8,6 +8,8 @@ import { PixLogo } from './PixLogo'
 import { PixelIcon } from './ui/PixelIcon'
 
 const NAV_HEIGHT = 64
+const REPO = 'https://github.com/skajuks/mascot'
+const NPM = 'https://www.npmjs.com/package/@robertskalve/mascot'
 
 export function App() {
   const [character, setCharacter] = useState<Character | CharacterDef>(pix)
@@ -43,6 +45,12 @@ export function App() {
           <a href="#integrate">integrate</a>
           <a href="#perches">perches</a>
           <a href="#editor">editor</a>
+          <a href={NPM} target="_blank" rel="noreferrer">
+            npm
+          </a>
+          <a href={REPO} target="_blank" rel="noreferrer" className="nav-icon" aria-label="Source on GitHub" title="GitHub">
+            <PixelIcon name="github" />
+          </a>
         </nav>
 
         <header id="top" className="hero">
@@ -121,7 +129,15 @@ export function App() {
 
         <MascotSpot as="footer" spot className="footer" chatter="The floor. My favorite." perch={{ edge: 'top', at: 0.92, size: 'xs', act: 'sleep' }}>
           <span>Grown out of Pix, the robot below the rift on robertskalve.lv.</span>
-          <span className="dim">MIT</span>
+          <span className="footer-links">
+            <a className="px-link" href={REPO} target="_blank" rel="noreferrer">
+              github
+            </a>
+            <a className="px-link" href={NPM} target="_blank" rel="noreferrer">
+              npm
+            </a>
+            <span className="dim">MIT</span>
+          </span>
         </MascotSpot>
       </div>
     </MascotProvider>
